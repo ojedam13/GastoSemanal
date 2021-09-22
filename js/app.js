@@ -61,6 +61,39 @@ class UI{
             divMensaje.remove();
         }, 3000)
     }
+
+    agregarGastoListado(gastos) {
+        
+        this.limpiarHtml(); //Elimina html previo
+
+        //iterar sobre los gastos
+        gastos.forEach ( gasto => {
+            const { cantidad, nombre, id } = gasto;
+
+            // crear un Li
+            const nuevoGasto = document.createElement('li');
+            nuevoGasto.className = 'list-group-item d-flex justify-content-between align-items-center';
+            nuevoGasto.dataset.id = id;
+
+            //agregar html del gasto
+            nuevoGasto.innerHTML = ` ${nombre} <span class="badge badge-primary badge-pill"> ${cantidad}</span>`;
+
+            //boton para borrar el gasto
+            const btnBorrar = document.createElement('button');
+            btnBorrar.classList.add('btn', 'btn-danger', 'borrar-gasto');
+            btnBorrar.textContent = 'Borrar X'
+            nuevoGasto.appendChild(btnBorrar);
+            //agregar al Html
+            gastoListado.appendChild(nuevoGasto);
+
+        })
+    }
+
+    limpiarHtml() {
+        while (gastoListado.firstChild) {
+            gastoListado.removeChild(gastoListado.firstChild);
+        }
+    }
 }
 
 // Instanciar 
@@ -111,6 +144,10 @@ function agregarGasto(e) {
 
     //Mensaje de todo bien
     ui.imprimirAlerta('Gasto agregado correctamente')
+
+    //imprimir los gastos
+    const { gastos } = presupuesto;
+    ui.agregarGastoListado(gastos);
     
     // Reinicia Formulario
     formulario.reset();
